@@ -1,0 +1,36 @@
+{
+  "name": "techblog",
+  "version": "1.0.0",
+  "description": "tech blog to post cool articles and blog posts for a tech nerd",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jnollen23/techblog.git"
+  },
+  "keywords": [
+    "blog"
+  ],
+  "author": "jnollen23",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jnollen23/techblog/issues"
+  },
+  "homepage": "https://github.com/jnollen23/techblog#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "bootstrap": "^5.2.3",
+    "connect-session-sequelize": "^7.1.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.0.2",
+    "express-session": "^1.17.3",
+    "handlebars": "^4.7.7",
+    "moment": "^2.29.4",
+    "mysql2": "^3.2.0",
+    "sequelize": "^6.29.3"
+  }
+}

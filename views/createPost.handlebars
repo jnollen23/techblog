@@ -1,0 +1,30 @@
+<div class="container">
+    <form id="createPost">
+        <div class="row d-flex justify-content-center">
+            <div class="col-10">
+                <div>
+                    <h2>Enter Title</h2>
+                </div>
+                <input type="text" class='w-100' id="titleInput" placeholder="Enter Title">
+            </div>
+        </div>
+        <br />
+        <div class="row d-flex justify-content-center">
+            <div class="col-10 ">
+                <div>
+                    <h2>Enter Content</h2>
+                </div>
+                <input type="text" class="w-100 pb-5" id="contentInput" placeholder="Enter the post contents here...">
+            </div>
+        </div>
+        <br />
+        <div class="row d-flex justify-content-center">
+            <div class="col d-flex justify-content-center">
+                <button class="btn btn-lg btn-success px-3" type="submit">Create</button>
+                <button class="btn btn-lg btn-danger" href="/Dashbord">Cancel</button>
+            </div>
+        </div>
+    </form>
+    <div id="postError" hidden="true">There was an error creating the post please try again.</div>
+    <script src="./js/createPost.js"></script>
+</div>
