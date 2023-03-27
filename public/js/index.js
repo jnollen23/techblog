@@ -11,3 +11,14 @@ function submitLogout(){
     })
 }
 
+
+const locationOfPage = document.location.pathname;
+if(locationOfPage ==='/Dashboard'){
+    document.getElementById('dash').classList.add('active');
+}
+else if(locationOfPage === '/Login' || locationOfPage === '/Signup'){
+    document.getElementById('login').classList.add('active');
+}
+else{
+    document.getElementById('home').classList.add('active');
+}

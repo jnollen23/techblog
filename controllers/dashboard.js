@@ -12,15 +12,18 @@ router.get('', async (req, res) => {
         });
         const user = await Users.findOne({ where: { id: req.session.user } });
         if (posts) {
-            posts.forEach(x =>{
-                x.workingTitle = x.title,
-                x.date = moment(x.createdAt).format('hh:mm:ss MM/DD/YYYY'),
-                x.bodyShort = x.body.substring(0, 100)
+            const postToShow = posts.map(item => {
+                return {
+                    title: item.title,
+                    date: moment(item.createdAt).format('hh:mm:ss MM/DD/YYYY'),
+                    body: item.body.substring(0, 100),
+                    id: item.id,
+                }
             }
             );
             res.render('dashboard', {
                 loggedIn: req.session.loggedIn,
-                posts: posts,
+                posts: postToShow,
                 user: user.username,
             }
             );
@@ -30,7 +33,7 @@ router.get('', async (req, res) => {
         }
     }
     else {
-        res.status(404).json({ message: 'not logged in' });
+        res.redirect('/Login');
     }
 });
 
@@ -50,7 +53,9 @@ router.get('/:id', async (req, res) => {
         }
         else res.status(404).json({ message: 'no post with that id' });
     }
-    res.status(404).json({ message: 'not logged in' });
+    else{
+    res.redirect('/Login');
+    }
 });
 
 module.exports = router;

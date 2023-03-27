@@ -18,8 +18,7 @@ router.get('/:id', async (req, res) => {
         ]
     });
     if (post) {
-        const loggedIn = req.session ? req.session.loggedIn : false;
-        res.render("content", loggedIn, post);
+        res.render("content", { loggedIn: req.session.loggedIn, post: post });
     }
 });
 
@@ -67,6 +66,30 @@ router.put('/:id', async (req, res) => {
         }
     }
     res.status(400).json({ message: 'Not logged in' });
+})
+
+router.delete('/:id', async (req, res) => {
+    if (req.session && req.session.loggedIn) {
+        const user = await Posts.findOne({
+            where: {
+                id: req.params.id,
+                user: req.session.user
+            }
+        });
+        if (user) {
+            const post = await Posts.destroy({ where: { id: req.params.id, user: req.session.user } });
+            if (post) {
+                res.status(200).json({ message: 'success' });
+            }
+            else res.status(400).json({ message: 'failed to delete' });
+        }
+        else {
+            res.status(400).json({ message: 'unable to delete post' });
+        }
+    }
+    else {
+        res.status(400).json({ message: 'not logged in' });
+    }
 })
 
 module.exports = router;

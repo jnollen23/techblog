@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const moment = require('moment');
 const { Posts, Comments } = require('../models');
 
 router.get('/Posts/:id', async (req, res) => {
@@ -10,7 +11,7 @@ router.get('/Posts/:id', async (req, res) => {
             ]
         });
 
-        res.render('post', {post});
+        res.render('post', { post });
     }
     catch (err) {
         console.log(err);
@@ -45,13 +46,13 @@ router.get('/Logout', async (req, res) => {
     res.redirect('/Home');
 })
 
-router.get('/CreatePost', (req, res)=>{
-    if(req.session && req.session.loggedIn){
+router.get('/CreatePost', (req, res) => {
+    if (req.session && req.session.loggedIn) {
         res.render('createPost', {
-           loggedIn:req.session.loggedIn, 
+            loggedIn: req.session.loggedIn,
         });
     }
-    else res.status(400).json({message:'not logged in'});
+    else res.status(400).json({ message: 'not logged in' });
 });
 
 router.get('/Home', async (req, res) => {
@@ -70,7 +71,14 @@ router.get('', async (req, res) => {
     //Return all posts
     try {
         const posts = await Posts.findAll();
-        res.render('home', { posts, loggedIn: req.session.loggedIn });
+        const postsToShow = posts.map(post => {
+            return {
+                title: post.title,
+                body: post.body.substring(0, 100),
+                date: moment(post.createdAt).format("hh:mm:ss MM/DD/YYYY"),
+            }
+        });
+        res.render('home', { posts: postsToShow, loggedIn: req.session.loggedIn });
     }
     catch (err) {
         console.log(err);
