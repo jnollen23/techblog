@@ -13,7 +13,7 @@
             <div class="card-header d-flex justify-content-between">
                 <div>
                     {{post.title}}
-                    <button class="btn btn-info">Update</button>
+                    <button class="btn btn-info" onclick="updatePost({{id}})">Update</button>
                     <button class="btn btn-danger" onclick="deleteConfirm({{post.id}}, '{{post.title}}')" 
                         data-bs-toggle='modal' 
                         data-bs-target='#deleteModal'>

@@ -51,11 +51,43 @@ router.get('/:id', async (req, res) => {
         if (posts) {
             res.render('dashboard-single', req.session.loggedIn, post);
         }
-        else res.status(404).json({ message: 'no post with that id' });
+        else {
+            res.render("badpage", {
+                loggedIn: req.session.loggedIn,
+                message: 'no post with that id'
+            });
+        }
     }
-    else{
-    res.redirect('/Login');
+    else {
+        res.redirect('/Login');
     }
+});
+
+router.get('/update/:id', async (req, res) => {
+    if (req.session && req.session.loggedIn) {
+        const post = await Posts.findOne({
+            where: {
+                id: req.params.id,
+                user: req.session.user
+            }
+        });
+        if (post) {
+            res.render('createPost', {
+                loggedIn: req.session.loggedIn,
+                title: post.title,
+                content: post.body,
+                id:post.id,
+                update:true,
+            })
+        }
+        else {
+            res.render("badpage", {
+                loggedIn: req.session.loggedIn,
+                message: 'The post does not exist or it is not your post'
+            });
+        }
+    }
+    else res.redirect('/Login');
 });
 
 module.exports = router;

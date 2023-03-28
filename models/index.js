@@ -12,19 +12,20 @@ Posts.hasMany(Users, {
 })
 
 Users.belongsTo(Comments,{
-    foreignKey:'user'
+    foreignKey:'user',
+    targetKey:'id'
 })
 
 Comments.hasMany(Users,{
-    foreignKey:'id'
+    foreignKey:'user'
 })
 
 Posts.belongsTo(Comments,{
-    foreignKey:'post'
+    foreignKey:'id'
 })
 
 Comments.hasMany(Posts,{
-    foreignKey:'id'
+    foreignKey:'post'
 })
 
 

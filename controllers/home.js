@@ -1,17 +1,43 @@
 const router = require('express').Router();
 const moment = require('moment');
-const { Posts, Comments } = require('../models');
+const { Posts, Comments, Users } = require('../models');
 
 router.get('/Posts/:id', async (req, res) => {
     //Get specific post and comments
     try {
-        const post = await Posts.findByPk(req.params.id, {
-            include: [
-                { model: Comments }
-            ]
+        const post = await Posts.findOne({
+            where: {
+                id: req.params.id,
+            }
         });
-
-        res.render('post', { post });
+        const comments = await Comments.findAll({
+            where: {
+                post: req.params.id
+            },
+            include: [
+                {
+                    model: Users,
+                }
+            ]
+        })
+        const postToShow = {
+            title: post.title,
+            body: post.body.substring(0, 100),
+            date: moment(post.createdAt).format("hh:mm:ss MM/DD/YYYY"),
+            id: post.id,
+        };
+        const commentsToShow = comments.map(comment => {
+            return {
+                body: comment.comment,
+                user: comment.users[0].username,
+                date: moment(comment.createdAt).format('hh:mm:ss MM/DD/YYYY'),
+            }
+        })
+        res.render('content', {
+            post: postToShow,
+            loggedIn: req.session.loggedIn,
+            comments: commentsToShow,
+        });
     }
     catch (err) {
         console.log(err);
@@ -59,7 +85,15 @@ router.get('/Home', async (req, res) => {
     //Return all posts
     try {
         const posts = await Posts.findAll();
-        res.render('home', { posts, loggedIn: req.session.loggedIn });
+        const postsToShow = posts.map(post => {
+            return {
+                title: post.title,
+                body: post.body.substring(0, 100),
+                date: moment(post.createdAt).format("hh:mm:ss MM/DD/YYYY"),
+                id: post.id,
+            }
+        });
+        res.render('home', { posts: postsToShow, loggedIn: req.session.loggedIn });
     }
     catch (err) {
         console.log(err);
@@ -76,6 +110,7 @@ router.get('', async (req, res) => {
                 title: post.title,
                 body: post.body.substring(0, 100),
                 date: moment(post.createdAt).format("hh:mm:ss MM/DD/YYYY"),
+                id: post.id,
             }
         });
         res.render('home', { posts: postsToShow, loggedIn: req.session.loggedIn });

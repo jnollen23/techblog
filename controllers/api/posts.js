@@ -32,10 +32,12 @@ router.post('/', async (req, res) => {
         if (post) {
             res.status(200).json({ message: 'success' });
         }
-        else res.status(400).json({ message: 'failed to create' });
+        else {
+            res.status(400).json({ message: 'failed to create' });
+        }
     }
     else {
-        res.status(404).json({ message: 'not logged in' });
+        res.redirect('/Login');
     }
 });
 
@@ -48,24 +50,35 @@ router.put('/:id', async (req, res) => {
         })
         if (post) {
             if (post.user === req.session.user) {
-                post.body = req.body.body;
-                post.title = req.body.title;
-                await Posts.update(post, {
+                const updateValues = {
+                    body: req.body.body,
+                    title: req.body.title,
+                }
+                await Posts.update(updateValues, {
                     where: {
                         id: req.params.id
                     }
                 });
-                res.status(200).json(post);
+                res.status(200).json({ message: 'success' });
             }
             else {
-                res.status(400).json({ message: 'post is not for this user' })
+                res.render("badpage", {
+                    loggedIn: req.session.loggedIn,
+                    message: 'post is not for this user'
+                });
             }
         }
         else {
+            res.render("badpage", {
+                loggedIn: req.session.loggedIn,
+                message: "post does not exist"
+            });
             res.status(400).json({ message: "post does not exist" });
         }
     }
-    res.status(400).json({ message: 'Not logged in' });
+    else {
+        res.redirect('/Login');
+    }
 })
 
 router.delete('/:id', async (req, res) => {
@@ -81,15 +94,34 @@ router.delete('/:id', async (req, res) => {
             if (post) {
                 res.status(200).json({ message: 'success' });
             }
-            else res.status(400).json({ message: 'failed to delete' });
+            else {
+                res.status(400).json({ message: 'failed to delete' });
+            }
         }
         else {
-            res.status(400).json({ message: 'unable to delete post' });
+            res.render("badpage", {
+                loggedIn: req.session.loggedIn,
+                message: 'unable to delete post'
+            });
         }
     }
     else {
-        res.status(400).json({ message: 'not logged in' });
+        res.redirect('/Login');
     }
 })
+
+router.post('/comment/:id', async (req, res)=>{   
+    if(req.session && req.session.loggedIn){
+        const comment = await Comments.create({
+            comment:req.body.comment,
+            post:req.params.id,
+            user:req.session.user,
+        })
+        res.status(200).json({message:"success"});
+    }
+    else{
+        res.redirect('/Login');
+    }
+});
 
 module.exports = router;

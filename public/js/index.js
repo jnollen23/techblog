@@ -22,3 +22,8 @@ else if(locationOfPage === '/Login' || locationOfPage === '/Signup'){
 else{
     document.getElementById('home').classList.add('active');
 }
+
+
+function cancelPost(){
+    window.location.replace('/Dashboard');
+}

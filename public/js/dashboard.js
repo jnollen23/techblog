@@ -16,4 +16,8 @@ function deletePost() {
     });
 }
 
+function updatePost(id){
+    document.location.replace(`/Dashboard/update/${id}`);
+}
+
 document.getElementById('deleteConfirm').addEventListener('click', deletePost);

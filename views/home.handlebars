@@ -1,14 +1,19 @@
-    {{#each posts as |post|}}
-    <div class="row pb-1">
-        <div class="col-12 card">
-            <div class="card-header d-flex justify-content-between">
-                    <span>{{post.title}}</span>
-                    <span>{{post.date}}</span>
-            </div>
-            <div class="card-body">
-                {{post.body}}
-            </div>
+{{#each posts as |post|}}
+<div class="row pb-1">
+    <div class="col-12 card">
+        <div class="card-header d-flex justify-content-between">
+            <span>{{post.title}}</span>
+            <span>{{post.date}}</span>
+        </div>
+        <div class="card-body">
+            {{post.body}}
+        </div>
+        <div class="card-footer">
+            <a href="/Posts/{{post.id}}">
+            <button class="btn btn-info">Comments</button>
+            </a>
         </div>
     </div>
-    <br />
-    {{/each}}
+</div>
+<br />
+{{/each}}
